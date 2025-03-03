@@ -14,14 +14,17 @@ A Telegram bot for anonymous messaging, built using `aiogram 3.9.0`.
    git clone https://github.com/Sayatttttttt/Conversation-bot.git
    cd Conversation-bot
    ```
+   
 2.Create a virtual environment (optional but recommended):
   ```
   python3 -m venv env
   ```
+
 3.Install dependencies:
   ```
   pip install -r requirements.txt
   ```
+
 4.Set up environment variables:
 Create a .env file (or edit config.py if used instead):
 BOT_TOKEN=your_telegram_bot_token
