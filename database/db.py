@@ -3,9 +3,9 @@ from datetime import datetime
 
 
 DB_CONFIG = {
-    "dbname": "diary",
-    "user": "diary_user",
-    "password": "your_passwordGe",
+    "dbname": "mydatabase",
+    "user": "myuser",
+    "password": "mypassword",
     "host": "localhost",
     "port": 5432,
 }
