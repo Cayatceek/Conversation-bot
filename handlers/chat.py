@@ -3,14 +3,12 @@ import re
 from aiogram import Router
 from aiogram.types import Message
 from database.db import save_message, get_chat_history, save_diary_entry, get_diary_entries
-from config import GENAI_API_KEY, MODEL_NAME
+from config import GENAI_API_KEY
 
 chat_router = Router()
 
 # Инициализация клиента для Google GenAI с правильным URL и ключом API
 client = genai.Client(api_key=GENAI_API_KEY)
-
-model_name = MODEL_NAME
 
 async def should_save_to_diary(text):
     """Анализирует сообщение и решает, нужно ли его записать в дневник."""
