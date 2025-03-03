@@ -1,11 +1,2 @@
-import os
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-#MODEL_NAME = "gpt-4o-mini"
-MODEL_NAME = "google/gemini-2.0-pro-exp-02-05:free"
-# MODEL_NAME = "google/gemini-2.0-flash-lite-preview-02-05:free"
+TOKEN = "7535012462:AAHkyUkWLjY1ANME0Xe7lH3rpkTnPNZ2zYs"
+GENAI_API_KEY = "AIzaSyD0p6zftMCtQkordF92AaVJiKIRHB7r3Po"

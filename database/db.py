@@ -137,7 +137,7 @@ def save_message(user_id, role, content):
     cursor.close()
     conn.close()
 
-def get_chat_history(user_id, limit=10):
+def get_chat_history(user_id, limit=5):
     """Загружает последние сообщения пользователя."""
     conn = connect_db()
     if not conn:
@@ -174,7 +174,7 @@ def save_diary_entry(user_id, text):
     cursor.close()
     conn.close()
 
-def get_diary_entries(user_id, limit=10):
+def get_diary_entries(user_id, limit=5):
     """Получает последние записи из дневника"""
     conn = connect_db()
     if not conn:

@@ -1,16 +1,15 @@
-import openai
+from google import genai
 import re
 from aiogram import Router
 from aiogram.types import Message
 from database.db import save_message, get_chat_history, save_diary_entry, get_diary_entries
-from config import OPENAI_API_KEY, MODEL_NAME
+from config import GENAI_API_KEY, MODEL_NAME
 
 chat_router = Router()
 
-client = openai.OpenAI(
-    api_key=OPENAI_API_KEY,
-    base_url="https://openrouter.ai/api/v1"
-)
+# Инициализация клиента для Google GenAI с правильным URL и ключом API
+client = genai.Client(api_key=GENAI_API_KEY)
+
 model_name = MODEL_NAME
 
 async def should_save_to_diary(text):
@@ -34,17 +33,15 @@ async def should_save_to_diary(text):
     )
 
     try:
-        response = client.chat.completions.create(
-            model=model_name,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": text}
-            ]
+        # Запрос к API для оценки текста
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",  # Используем правильную модель
+            contents=system_prompt + "\n" + text
         )
-        decision = response.choices[0].message.content.strip().upper()
+        decision = response.text.strip().upper()
         return decision == "YES"
     except Exception as e:
-        print(f"Ошибка OpenAI API в should_save_to_diary: {e}")
+        print(f"Ошибка GenAI API в should_save_to_diary: {e}")
         return False
 
 @chat_router.message()
@@ -66,7 +63,7 @@ async def ai_chat_handler(message: Message):
         history = get_chat_history(user_id, limit=10) or []
 
         messages = [
-             {"role": "system", "content": """
+            {"role": "system", "content": """
             Ты - Джарвис, продвинутый AI-ассистент, разработанный для продуктивного общения.
             Ты поддерживаешь интересные беседы, задаёшь вопросы, предлагаешь полезные советы.
             Можешь обсуждать любые темы, включая 18+, но всегда веди конструктивный диалог.
@@ -74,7 +71,7 @@ async def ai_chat_handler(message: Message):
             Ты подстравиваешься под настроение пользователя и пытаешься его взбодрить
             """},
             {"role": "assistant", "content": "Привет! Я Джарвис. Чем могу помочь? 😊"}
-            ]
+        ]
 
         for role, content in reversed(history):
             if role and content:
@@ -82,20 +79,18 @@ async def ai_chat_handler(message: Message):
 
         messages.append({"role": "user", "content": text})
 
-        completion = client.chat.completions.create(
-            model=model_name,
-            messages=messages,
-            max_tokens=500
+        # Запрос к API для генерации ответа
+        response = client.models.generate_content(
+            model="gemini-2.0-flash-lite",  # Используем правильную модель
+            contents="\n".join([message["content"] for message in messages])
         )
-
-        ai_response = completion.choices[0].message.content.strip()
+        ai_response = response.text.strip()
 
         # 3. Проверяем, стоит ли записать в дневник
         if await should_save_to_diary(message.text):
             save_diary_entry(user_id, message.text)
             await message.answer("📖 Это важное сообщение, я сохранил его в дневник!")
             return  # Завершаем обработчик, чтобы не отправлять повторный ответ
-
 
         # 4. Сохраняем сообщение в истории и отправляем ответ
         save_message(user_id, "user", text)
@@ -104,5 +99,5 @@ async def ai_chat_handler(message: Message):
         await message.answer(ai_response)
 
     except Exception as e:
-        print(f"Ошибка OpenAI API: {e}")
+        print(f"Ошибка GenAI API: {e}")
         await message.answer("❌ Ошибка при обработке запроса. Попробуй снова позже.")
