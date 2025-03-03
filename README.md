@@ -24,8 +24,8 @@ Install dependencies:
   ```
 Set up environment variables:
 Create a .env file (or edit config.py if used instead):
-
 BOT_TOKEN=your_telegram_bot_token
+
 Running the Bot
   ```
   python3 bot.py
