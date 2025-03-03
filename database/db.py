@@ -5,7 +5,7 @@ from datetime import datetime
 DB_CONFIG = {
     "dbname": "diary",
     "user": "diary_user",
-    "password": "f333f9de8e984d75bc2f8ffc6bda9314",
+    "password": "your_passwordGe",
     "host": "localhost",
     "port": 5432,
 }
