@@ -1,1 +1,3 @@
-from database.db import create_db()
+from database.db import create_tables()
+
+create_tables()
