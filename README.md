@@ -9,7 +9,7 @@ A Telegram bot for anonymous messaging, built using `aiogram 3.9.0`.
 
 ## Installation (Shell)
 
-1. **Clone the repository:**
+1. Clone the repository:
    ```
    git clone https://github.com/Sayatttttttt/Conversation-bot.git
    cd Conversation-bot
